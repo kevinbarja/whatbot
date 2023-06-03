@@ -14,7 +14,7 @@ client.on('ready', () => {
 
 // Mention everyone
 client.on('message', async (msg) => {
-    if(msg.body === '!everyone') {
+    if(msg.body === '!todos') {
         const chat = await msg.getChat();
         
         let text = "";

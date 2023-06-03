@@ -21,6 +21,6 @@
   "homepage": "https://github.com/kevinbarja/whabot#readme",
   "dependencies": {
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.19.5"
+    "whatsapp-web.js": "^1.21.0"
   }
 }
