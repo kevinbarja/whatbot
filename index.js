@@ -16,22 +16,20 @@ client.on('ready', () => {
 client.on('message', async (msg) => {
     if(msg.body === '!todos') {
         const chat = await msg.getChat();
-        
+        //Log chat
+        console.log(`Chat id @${JSON.stringify(chat)}`);
+
         let text = "";
         let mentions = [];
 
         for(let participant of chat.participants) {
-            const contact = await client.getContactById(participant.id._serialized);
+            //const contact = await client.getContactById(participant.id._serialized);
             
-            mentions.push(contact);
+            mentions.push(participant.id._serialized);
             text += `@${participant.id.user} `;
         }
 
         await chat.sendMessage(text, { mentions });
-    }
-    if(msg.body === '!id') {
-        const chat = await msg.getChat();
-        console.log(`Chat id @${JSON.stringify(chat.id)}`);
     }
 });
  
