@@ -36,9 +36,9 @@ app.post('/send', async (req, res) => {
         return groupChatObj;
       });    
     */
-    const chat = await client.getChatById('59175001599-1527638324@g.us')
+    const chat = await client.getChatById('')
     ///console.log(`Chat id @${JSON.stringify(chat)}`);
-    let text = "¿Quienes van hoy al discipulado: Construyendo Sueños?\n\n\n";
+    let text = "¿Qué dice la masa? Junte?\n\n\n";
     let mentions = [];
 
     for(let participant of chat.participants) {
