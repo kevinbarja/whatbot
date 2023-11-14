@@ -1,15 +1,30 @@
+
 const express = require('express');
 const qrcode = require('qrcode-terminal');
 const bodyParser = require('body-parser');
 const app = express();
-const { Client, MessageMedia, GroupChat } = require('whatsapp-web.js');
+
+
+const { Client, MessageMedia,GroupChat, LocalAuth   } = require('whatsapp-web.js');
+const axios = require("axios").default;
+const request = require("request");
+const FormData = require("form-data");
+const fs = require('fs');
+
 // Configuración de Express
 app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.json({limit: '500mb'}))
 // Configuración del cliente de WhatsApp
 
-const client = new Client();
+const API_KEY = "VF.DM.6552db298b57010008df772a.7SuLnnxBoosW4Wjl";
+
+//const client = new Client();
+// Use the saved values
+const client = new Client({
+  authStrategy: new LocalAuth()
+});
+
 
   client.on('qr', (qr) => {
     qrcode.generate(qr, {small: true});
@@ -89,6 +104,7 @@ app.post('/send-video', async (req, res) => {
 });
 
 
+/*
 client.on('message', async (msg) => {
     if(msg.body === '!edu') {
         const chat = await client.getChatById('59178002823-1422484064@g.us')
@@ -107,6 +123,77 @@ client.on('message', async (msg) => {
 
         await chat.sendMessage(text, { mentions });
     }
+});
+*/
+
+function isIterable(obj, prop) {
+  return typeof obj[prop] === "object" && typeof obj[prop][Symbol.iterator] === "function";
+}
+
+function writeToFile(message) {
+  fs.appendFile("logfile.txt", message + "\n", (err) => {
+    if (err) {
+      console.error('Error writing to the file:', err);
+    } else {
+      console.log('Data has been written to the file.');
+    }
+  });
+}
+
+
+client.on('message', async (msg) => {
+  const chat = await msg.getChat();
+  //Exit if is message group
+  if (isIterable(chat, "participants")) return;
+  //Exit if isn't text message
+  let message = msg.body;
+  if (msg.type != 'chat'){
+    message = '';
+  }
+  //Alow only bolivian number with prefix 591
+  if (!msg.from.startsWith('591') ) {
+    msg.reply('Lo siento, por el momento sólo converso con números de Bolivia. 😔');
+    return;
+  }
+
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `https://general-runtime.voiceflow.com/state/user/8/interact`,
+      headers: { Authorization: API_KEY },
+      data: {action: { type: "text", payload: message}}
+    });
+    //writeToFile(JSON.stringify(response.data));
+    if (response.data != [] && response.data.message != '' && msg.from != '59172103001@c.us') {
+      const res =response.data;
+        // loop through the response
+        for (const trace of res) {
+          switch (trace.type) {
+            case "text":
+            case "speak": {
+              client.sendMessage( msg.from, trace.payload.message);
+              console.log(trace.payload.message);
+              break;
+            }
+            case "end": {
+              // an end trace means the the Voiceflow dialog has ended
+              return false;
+            }
+          }
+        }
+
+      
+    }
+
+    //writeToFile(JSON.stringify(response.data));
+  } catch (error) {
+    // Manejar el error aquí
+    writeToFile('Error al hacer la solicitud:' + JSON.stringify(error));
+    if (msg.from != '59172103001@c.us')
+    {
+      msg.reply('Lo siento, ocurrió un error no controlado. 😔');
+    }
+  }
 });
 
 // Iniciar el cliente de WhatsApp

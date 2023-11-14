@@ -1,0 +1,8 @@
+[{"type":"text","payload":{"slate":{"id":"361bn0ylr","content":[{"children":[{"text":"Hola, soy una inteligencia artificial entrenada con el reglamento de "},{"text":"Rapjuve 2023","fontWeight":"700"},{"text":", preguntame lo que quieras"}]}],"messageDelayMilliseconds":30},"message":"Hola, soy una inteligencia artificial entrenada con el reglamento de Rapjuve 2023, preguntame lo que quieras","delay":30}}]
+Error al hacer la solicitud:{}
+[{"type":"text","payload":{"slate":{"id":"361bn0ylr","content":[{"children":[{"text":"Hola, soy una inteligencia artificial entrenada con el reglamento de "},{"text":"Rapjuve 2023","fontWeight":"700"},{"text":", preguntame lo que quieras"}]}],"messageDelayMilliseconds":30},"message":"Hola, soy una inteligencia artificial entrenada con el reglamento de Rapjuve 2023, preguntame lo que quieras","delay":30}}]
+Error al hacer la solicitud:{}
+Error al hacer la solicitud:{}
+Error al hacer la solicitud:{}
+Error al hacer la solicitud:{}
+Error al hacer la solicitud:{}
